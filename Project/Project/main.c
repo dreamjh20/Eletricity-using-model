@@ -96,7 +96,7 @@ int main(void)
 	unsigned char sw6=0;
 	unsigned char sw7=0;
 	unsigned char sw8=0;
-	int leds[6] = {0, 0, 0, 0, 0, 0};
+	int leds[7] = {0, 0, 0, 0, 0, 0, 0};
 	int onoff=0x00;
 	unsigned t = 5;
 	DDRC = 0xff; //lcd
@@ -128,6 +128,9 @@ int main(void)
 		}
 		if((PINE&0x20) == 0x00) {
 			sw6 = 1 - sw6;
+		}
+		if((PINE&0x40) == 0x00) {
+			sw7 = 1 - sw7;
 		}
 		
 		if(sw1 == 1){
@@ -189,6 +192,16 @@ int main(void)
 		}
 		else if(sw6 == 0) {
 			leds[5] = 0;
+			PORTA = 0x00;
+			_delay_ms(t);
+		}
+		if(sw7 == 1){
+			leds[6] = 1;
+			PORTA = 0x40;
+			_delay_ms(t);
+		}
+		else if(sw7 == 0) {
+			leds[6] = 0;
 			PORTA = 0x00;
 			_delay_ms(t);
 		}
