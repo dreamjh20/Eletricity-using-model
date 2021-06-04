@@ -1,13 +1,10 @@
 #define F_CPU 16000000UL
-
 #include <avr/io.h>
 #include <util/delay.h>
-
 
 void COMMAND(unsigned char byte);
 void DATA(unsigned char byte);
 void LCD_INIT(void);
-
 
 void STRING(unsigned char font[], unsigned char n)
 {
