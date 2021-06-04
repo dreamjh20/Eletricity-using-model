@@ -86,6 +86,15 @@ void DATA(unsigned char byte)		// 데이터 함수x`
 	PORTC &= 0b11111011;		// E = 0
 }
 
+int check(int leds[]){
+	for(int i = 0; i < 8; i++){
+		if(leds[i] == 1){
+			return 0;
+		}
+	}
+	return 1;
+}
+
 int main(void)
 {
 	unsigned char sw1=0;
@@ -97,8 +106,7 @@ int main(void)
 	unsigned char sw7=0;
 	unsigned char sw8=0;
 	int leds[7] = {0, 0, 0, 0, 0, 0, 0};
-	int onoff=0x00;
-	unsigned t = 5;
+	unsigned int t = 5;
 	DDRC = 0xff; //lcd
 	DDRE = 0xFF; //led
 	DDRA = 0xFF;
@@ -206,5 +214,10 @@ int main(void)
 			_delay_ms(t);
 		}
 		
+		if(check(leds) == 1){ //상태 led 켜기
+			
+		} else{ //상태 led 끄기
+			
+		}
 	}	
 }
