@@ -111,8 +111,7 @@ int main(void)
 	PORTC = 0x00; //lcd
 	DDRE = 0x00; //스위치
 	
-	LCD_INIT();
-	
+	LCD_INIT(); //lcd초기
 	while(1)
 	{
 		//스위치
@@ -212,9 +211,9 @@ int main(void)
 		}
 		
 		if(check(leds) == 1){ //상태 led 켜기
-			
+			PORTA = 0x80; //A8
 		} else{ //상태 led 끄기
-			
+			PORTA = 0x00;
 		}
 	}	
 }
