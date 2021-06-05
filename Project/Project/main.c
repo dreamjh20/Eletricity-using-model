@@ -83,14 +83,6 @@ void DATA(unsigned char byte)		// 데이터 함수x`
 	PORTC &= 0b11111011;		// E = 0
 }
 
-int check(int leds[]){
-	for(int i = 0; i < 8; i++){
-		if(leds[i] == 1){
-			return 0;
-		}
-	}
-	return 1;
-}
 
 int main(void)
 {
@@ -101,7 +93,6 @@ int main(void)
 	unsigned char sw5=0;
 	unsigned char sw6=0;
 	unsigned char sw7=0;
-	unsigned char sw8=0;
 	int leds[7] = {0, 0, 0, 0, 0, 0, 0};
 	unsigned int t = 5;
 	DDRC = 0xff; //lcd
@@ -114,6 +105,7 @@ int main(void)
 	LCD_INIT(); //lcd초기
 	while(1)
 	{
+		sw7=0;
 		//스위치
 		if((PINE&0x01) == 0x00) {
 			sw1 = 1 - sw1;
@@ -134,7 +126,7 @@ int main(void)
 			sw6 = 1 - sw6;
 		}
 		if((PINE&0x40) == 0x00) {
-			sw7 = 1 - sw7;
+			sw7 = 1;
 		}
 		
 		if(sw1 == 1){
@@ -199,21 +191,29 @@ int main(void)
 			PORTA = 0x00;
 			_delay_ms(t);
 		}
+		//led off switch
 		if(sw7 == 1){
-			leds[6] = 1;
-			PORTA = 0x40;
-			_delay_ms(t);
-		}
-		else if(sw7 == 0) {
-			leds[6] = 0;
-			PORTA = 0x00;
-			_delay_ms(t);
+			sw1 = 0;
+			sw2 = 0;
+			sw3 = 0;
+			sw4 = 0;
+			sw5 = 0;
+			sw6 = 0;
 		}
 		
-		if(check(leds) == 1){ //상태 led 켜기
-			PORTA = 0x80; //A8
+		/*if(check(leds) == 1){ //상태 led 켜기
+			PORTA = 0xFF; //A8
 		} else{ //상태 led 끄기
-			PORTA = 0x00;
-		}
+			PORTA = 0xFF;
+		}*/
+		
+		/*for(int i = 0; i < 8; i++){
+			if(leds[i] == 1) {
+				PORTA = 0xFF;
+				break;
+			}
+		}*/
+		
+		
 	}	
 }
