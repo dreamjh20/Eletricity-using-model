@@ -95,6 +95,7 @@ int main(void)
 	unsigned char sw7=0;
 	int leds[7] = {0, 0, 0, 0, 0, 0, 0};
 	unsigned int t = 2;
+	float countL = 0;
 	DDRC = 0xff; //lcd
 	DDRE = 0xFF; //led
 	DDRA = 0xFF;
@@ -129,6 +130,7 @@ int main(void)
 		
 		
 		sw7=0;
+		countL = 0;
 		//스위치
 		if((PINE&0x01) == 0x00) {
 			sw1 = 1 - sw1;
@@ -244,13 +246,33 @@ int main(void)
 			MOVE(1,11-l);
 			if(leds[l] == 1){
 				DATA('O');
+				countL++;
 			}
 			else{
 				DATA('X');
 			}
 			
 		}
-		_delay_ms(50);
+		
+		
+		MOVE(2, 1);
+		DATA('U');
+		DATA('s');
+		DATA('i');
+		DATA('n');
+		DATA('g');
+		DATA(' ');
+		DATA('E');
+		DATA('l');
+		DATA('e');
+		DATA('c');
+		DATA(':');
+		MOVE(2, 13);
+		DATA('0');
+		DATA('.');
+		DATA(countL+0x30);
+		DATA('W');
+		_delay_ms(60);
 		COMMAND(0b00000001);
 		
 	}	
