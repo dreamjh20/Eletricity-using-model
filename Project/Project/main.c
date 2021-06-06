@@ -94,7 +94,7 @@ int main(void)
 	unsigned char sw6=0;
 	unsigned char sw7=0;
 	int leds[7] = {0, 0, 0, 0, 0, 0, 0};
-	unsigned int t = 5;
+	unsigned int t = 2;
 	DDRC = 0xff; //lcd
 	DDRE = 0xFF; //led
 	DDRA = 0xFF;
@@ -102,9 +102,32 @@ int main(void)
 	PORTC = 0x00; //lcd
 	DDRE = 0x00; //스위치
 	
+	unsigned char fnd[10] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xd8, 0x80, 0x90};
+	unsigned char digit, fnd_position=0x01;
+	
+	DDRB=0xFF;
+	DDRD=0x0F;
+	PORTB=0xFF;
+	PORTD=0x0F;
+	
 	LCD_INIT(); //lcd초기
+	
 	while(1)
 	{
+		/*
+		for(digit=0;digit<10;digit++)
+		{
+			PORTD=fnd_position;
+			fnd_position<<=1;
+			
+			if(fnd_position==0x10)
+			fnd_position=0x01;
+			
+			PORTB=fnd[digit];
+			_delay_ms(1000);
+		}*/
+		
+		
 		sw7=0;
 		//스위치
 		if((PINE&0x01) == 0x00) {
@@ -207,13 +230,28 @@ int main(void)
 			PORTA = 0xFF;
 		}*/
 		
-		/*for(int i = 0; i < 8; i++){
+		for(int i = 0; i < 8; i++){
 			if(leds[i] == 1) {
-				PORTA = 0xFF;
+				PORTA = 0x40;
+				_delay_ms(t);
 				break;
 			}
-		}*/
+		}
 		
+		//lcd에 on/off 출력
+		for(int l = 5; l >= 0; l--){
+			
+			MOVE(1,11-l);
+			if(leds[l] == 1){
+				DATA('O');
+			}
+			else{
+				DATA('X');
+			}
+			
+		}
+		_delay_ms(50);
+		COMMAND(0b00000001);
 		
 	}	
 }
