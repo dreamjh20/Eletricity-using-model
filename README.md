@@ -15,5 +15,5 @@ Status led : if all Leds off -> off
 1 Push Button (Off all)
 
 Lcd upper line show which Leds are on(off)
-Lcd downner line show Power Consumption
+Lcd downner line show Power Consumption (W)
 Fnd shows led running time(upcount)
