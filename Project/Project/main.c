@@ -18,7 +18,7 @@ void STRING(unsigned char font[], unsigned char n)
 void MOVE(int y, int x)     //커서 이동
 {
 	unsigned char data;
-	if(y==1) 	data=0x80+x-1;           //1행
+	if(y==1) 	data=0x80+x-1;            //1행
 	else     	data=0xc0+x-1;            //2행
 	COMMAND(data);
 }
@@ -62,7 +62,7 @@ void LCD_INIT(void)			// 초기설정 함수
 	COMMAND(0b00000110);	// 커서방향(I/D)=1(address증가), 표시이동(S)=0(이동하지 않음)
 }
 
-void DATA(unsigned char byte)		// 데이터 함수x`
+void DATA(unsigned char byte)		// 데이터 함수x
 {
 	_delay_ms(2);
 
@@ -83,30 +83,31 @@ void DATA(unsigned char byte)		// 데이터 함수x`
 	PORTC &= 0b11111011;		// E = 0
 }
 
-
 int fnds(int count){
 	unsigned char fnd[10] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xd8, 0x80, 0x90};
-	
+
 	int i = count / 1000;
 	int j = count / 100 % 10;
 	int k = count / 10 % 10;
 	int m = count % 10;
 
-	for(int h = 0; h < 5; h++){
+	for(int h = 0; h < 50; h++){
 		PORTB=fnd[i];
 		PORTD=0x08; //왼쪽에서 첫번째 FND 지정
 		_delay_ms(1);
+		
 		PORTB=fnd[j];
 		PORTD=0x04; //두번째 FND 지정
 		_delay_ms(1);
+		
 		PORTB=fnd[k];
 		PORTD=0x02; //세번째 FND 지정
 		_delay_ms(1);
+		
 		PORTB=fnd[m];
 		PORTD=0x01; //네번째 FND 지정
 		_delay_ms(1);
 	}
-	
 }
 
 int main(void)
@@ -119,7 +120,8 @@ int main(void)
 	unsigned char sw6=0;
 	unsigned char sw7=0;
 	int leds[7] = {0, 0, 0, 0, 0, 0, 0};
-	unsigned int t = 1;
+	unsigned int t = 2;
+	int ch = 0;
 	unsigned int count = 0;
 	unsigned int countL = 0;
 	DDRC = 0xff; //lcd
@@ -129,11 +131,10 @@ int main(void)
 	PORTC = 0x00; //lcd
 	DDRE = 0x00; //스위치
 	
-	
 	DDRB=0xFF;
-	DDRD=0x0F;
+	DDRD=0xFF;
 	PORTB=0xFF;
-	PORTD=0x0F;
+	PORTD=0xFF;
 	
 	LCD_INIT(); //lcd초기
 	
@@ -151,8 +152,7 @@ int main(void)
 			PORTB=fnd[digit];
 			_delay_ms(1000);
 		}*/
-		
-		
+
 		sw7=0;
 		countL = 0;
 		//스위치
@@ -185,70 +185,68 @@ int main(void)
 			count++;
 		}
 		
-		
-		if(sw1 == 1){
-			leds[0] = 1;
-			PORTA|=0x01;
-			//_delay_ms(t);
-		}
-		
-		else if(sw1 == 0) {
-			leds[0] = 0;
-			PORTA &= 0xFE;
-			//_delay_ms(t);
-		}
-		
-		if(sw2 == 1){
-			leds[1] = 1;
-			PORTA|=0x02;
-			//_delay_ms(t);
-		}
-		else if(sw2 == 0) {
-			leds[1] = 0;
-			PORTA &= 0xfd;
-			//_delay_ms(t);
-		}
-		
-		
-		if(sw3 == 1){
-			leds[2] = 1;
-			PORTA |= 0x04;
-			//_delay_ms(t);
-		}
-		else if(sw3 == 0) {
-			leds[2] = 0;
-			PORTA &= 0xFB;
-			//_delay_ms(t);
-		}
-		if(sw4 == 1){
-			leds[3] = 1;
-			PORTA |= 0x08;
-			//_delay_ms(t);
-		}
-		else if(sw4 == 0) {
-			leds[3] = 0;
-			PORTA &= 0xF7;
-			//_delay_ms(t);
-		}
-		if(sw5 == 1){
-			leds[4] = 1;
-			PORTA |= 0x10;
-			//_delay_ms(t);
-		}
-		else if(sw5 == 0) {
-			leds[4] = 0;
-			PORTA &= 0xEF;
-			//_delay_ms(t);
-		}
-		if(sw6 == 1){
-			leds[5] = 1;
-			PORTA |= 0x20;
-			//_delay_ms(t);
-		}
-		else if(sw6 == 0) {
-			leds[5] = 0;
-			PORTA &= 0xDF;
-			//_delay_ms(t);
+		for(int m=0; m < 2; m++){
+			if(sw1 == 1){
+				leds[0] = 1;
+				PORTA|=0x01;
+				//_delay_ms(t);
+			}
+
+			else if(sw1 == 0) {
+				leds[0] = 0;
+				PORTA &= 0xFE;
+				_delay_ms(t);
+			}
+			if(sw2 == 1){
+				leds[1] = 1;
+				PORTA|=0x02;
+				_delay_ms(t);
+			}
+			else if(sw2 == 0) {
+				leds[1] = 0;
+				PORTA &= 0xfd;
+				_delay_ms(t);
+			}
+			if(sw3 == 1){
+				leds[2] = 1;
+				PORTA |= 0x04;
+				_delay_ms(t);
+			}
+			else if(sw3 == 0) {
+				leds[2] = 0;
+				PORTA &= 0xFB;
+				_delay_ms(t);
+			}
+			if(sw4 == 1){
+				leds[3] = 1;
+				PORTA |= 0x08;
+				_delay_ms(t);
+			}
+			else if(sw4 == 0) {
+				leds[3] = 0;
+				PORTA &= 0xF7;
+				_delay_ms(t);
+			}
+			if(sw5 == 1){
+				leds[4] = 1;
+				PORTA |= 0x10;
+				_delay_ms(t);
+			}
+			else if(sw5 == 0) {
+				leds[4] = 0;
+				PORTA &= 0xEF;
+				_delay_ms(t);
+			}
+			if(sw6 == 1){
+				leds[5] = 1;
+				PORTA |= 0x20;
+				_delay_ms(t);
+			}
+			else if(sw6 == 0) {
+				leds[5] = 0;
+				PORTA &= 0xDF;
+				_delay_ms(t);
+			}
 		}
 		//led off switch
 		if(sw7 == 1){
@@ -259,7 +257,6 @@ int main(void)
 			sw5 = 0;
 			sw6 = 0;
 		}
-		
 		fnds(count);
 		
 		/*if(check(leds) == 1){ //상태 led 켜기
@@ -290,24 +287,26 @@ int main(void)
 			}
 		}
 		
-		MOVE(2, 1);
-		DATA('U');
-		DATA('s');
-		DATA('i');
-		DATA('n');
-		DATA('g');
-		DATA(' ');
-		DATA('E');
-		DATA('l');
-		DATA('e');
-		DATA('c');
-		DATA(':');
-		MOVE(2, 13);
-		DATA('0');
-		DATA('.');
-		DATA(countL+0x30);
-		DATA('W');
-		_delay_ms(70);
-		COMMAND(0b00000001);		
+		for(int i = 0; i < 10; i++) {
+			MOVE(2, 1);
+			DATA('U');
+			DATA('s');
+			DATA('i');
+			DATA('n');
+			DATA('g');
+			DATA(' ');
+			DATA('E');
+			DATA('l');
+			DATA('e');
+			DATA('c');
+			DATA(':');
+			MOVE(2, 13);
+			DATA('0');
+			DATA('.');
+			DATA(countL+0x30);
+			DATA('W');
+			_delay_ms(1);
+		}
+		COMMAND(0b00000001);
 	}	
 }
