@@ -6,4 +6,4 @@ This project go with
 6 Push Button
 1 Lcd
 1 Fnd
-Must needed
+Must needed.
