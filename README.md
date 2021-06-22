@@ -1,4 +1,5 @@
 # Eletricity-using-model
+# 28/30
 Personal Project Embeded Department
 
 This project go with
